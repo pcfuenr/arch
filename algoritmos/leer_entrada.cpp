@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <algorithm>
 
-std::vector<int> lecturaEntrada(){
+std::vector<int> lecturaEntrada(int dataset) {
     namespace fs = std::filesystem;
     std::vector<int> numeros;
     int numero;
@@ -34,25 +34,12 @@ std::vector<int> lecturaEntrada(){
     }
     std::sort(archivos.begin(), archivos.end());
 
-    // 2) Mostrar menú
-    //std::cout << "Archivos en " << ds << ":\n";
-    //for (size_t i = 0; i < archivos.size(); ++i)
-    //    std::cout << "  " << (i+1) << ". " << archivos[i] << "\n";
-
-    // 3) Leer opción
-    size_t op = 0;
-    while (op<1 || op>archivos.size()) {
-    //    std::cout << "Selecciona (1-" << archivos.size() << "): ";
-        std::cin >> op;
-    }
-
-    // 4) Abrir y leer
-    fs::path file = ds / archivos[op-1];
+    // 3) Abrir y leer
+    fs::path file = ds / archivos[dataset-1];
     std::ifstream in(file, std::ios::binary);
     if (!in) { std::cerr<<"no pude abrir "<<file<<"\n"; std::exit(EXIT_FAILURE); }
     while (in.read(reinterpret_cast<char*>(&numero), sizeof(int)))
         numeros.push_back(numero);
-
-    std::cout << numeros.size() << ";" << archivos[op-1];
+    in.close();
     return numeros;
 }
